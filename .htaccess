@@ -1,0 +1,35 @@
+# 🌐 Redirect www to non-www
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
+
+
+# 🔐 Block access to sensitive folders & files
+RedirectMatch 403 ^/app/
+RedirectMatch 403 ^/bootstrap/
+RedirectMatch 403 ^/config/
+RedirectMatch 403 ^/database/
+RedirectMatch 403 ^/resources/
+RedirectMatch 403 ^/routes/
+RedirectMatch 403 ^/vendor/
+RedirectMatch 403 ^/artisan
+RedirectMatch 403 ^/\.env
+RedirectMatch 403 ^/composer\.(json|lock)
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # 🚫 Block fake/spammy URL extensions
+    RewriteCond %{REQUEST_URI} \.(php|asp|aspx|jsp|html|htm)$ [NC]
+    RewriteRule .* - [F,L]
+
+    # Redirect Trailing Slashes...
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# Set the “ea-php74” package as the default “PHP” programming language.
+<IfModule mime_module>
+  AddHandler application/x-httpd-ea-php82 .php .php8 .phtml
+</IfModule>
+# php -- END cPanel-generated handler, do not edit
